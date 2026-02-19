@@ -1,0 +1,39 @@
+@use "../abstracts/index" as a;
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 7.6rem;
+
+  background-color: a.$color-primary;
+  box-shadow: 0 .2rem .8rem 0 #B7AB9126;
+  animation: fadeIn .5s ease-in backwards 1s;
+
+  margin-top: auto;
+
+  div {
+    padding: 1.8rem;
+
+    @apply w-1/3;
+  }
+
+  &__links {
+    font-size: 1.8rem;
+    text-align: center;
+
+    a:not(:last-child) {
+      margin-right: 1rem;
+    }
+
+    @apply text-2xl;
+  }
+
+  &__copyright {
+    color: a.$color-inactive-text;
+    text-align: right;
+    @apply text-sm;
+  }
+}

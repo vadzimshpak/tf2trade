@@ -1,0 +1,42 @@
+@use "../abstracts/index" as a;
+
+.button {
+  width: 100%;
+  min-height: 4rem;
+
+  padding: .8rem 1.6rem;
+  border-radius: .4rem;
+
+  background-color: a.$color-accent;
+  color: a.$color-text;
+  box-shadow: 0 .1rem 0 a.$color-accent-active;
+
+  transition: all .2s;
+
+  cursor: pointer;
+
+  @apply text-xl font-semibold;
+
+  &:hover {
+    transform: translateY(-.3rem);
+    box-shadow: 0 .5rem 0 a.$color-accent-active;
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 .1rem 0 a.$color-accent-active;
+  }
+
+  &:disabled {
+    background-color: a.$color-secondary-text;
+    box-shadow: 0 .1rem 0 a.$color-secondary-text;
+    color: a.$color-primary;
+    cursor: not-allowed;
+  }
+
+  &--huge {
+    min-height: 10rem;
+
+    @apply text-5xl font-bold;
+  }
+}

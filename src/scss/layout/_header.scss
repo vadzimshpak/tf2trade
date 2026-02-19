@@ -1,0 +1,32 @@
+@use "../abstracts/index" as a;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100%;
+  height: 7.6rem;
+
+  background-color: a.$color-primary;
+  box-shadow: 0 .2rem .8rem 0 #B7AB9126;
+
+  div {
+    padding: 1.8rem;
+  }
+
+  &__logo {
+    color: a.$color-accent;
+    cursor: pointer;
+
+    @apply text-3xl;
+  }
+
+  &__nav-buttons {
+    display: flex;
+
+    button:not(:last-child) {
+      margin-right: 1.6rem;
+    }
+  }
+}

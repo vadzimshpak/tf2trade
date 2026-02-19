@@ -1,0 +1,10 @@
+@use "../abstracts/index" as a;
+
+hr {
+  border: .1rem solid a.$color-accent2;
+  height: .1rem;
+  background-color: a.$color-accent2;
+  opacity: 0.2;
+
+  margin: 2rem 0 !important;
+}

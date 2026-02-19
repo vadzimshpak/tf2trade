@@ -1,0 +1,65 @@
+@use "../../abstracts/index" as a;
+
+.inventory {
+  display: flex;
+  flex-direction: column;
+
+
+  @apply w-1/2;
+
+  &__selected {
+    background-color: rgba(a.$color-secondary, .03);
+    backdrop-filter: blur(95px);
+    border: .1rem solid hsla(0, 0%, 100%, .15);
+
+    border-radius: .8rem;
+
+    //box-shadow: 0px .2rem .8rem 0px #B7AB9126;
+
+    @apply p-8 m-6;
+  }
+
+  &__main {
+    background-color: rgba(a.$color-secondary, .03);
+    backdrop-filter: blur(95px);
+    border: .1rem solid hsla(0, 0%, 100%, .15);
+
+    border-radius: .8rem;
+
+    @apply p-8 m-6;
+  }
+
+  @media (max-width: 900px) {
+    @apply w-full;
+  }
+}
+
+.inventory-block {
+  text-align: center;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: a.$color-accent2;
+
+    @apply text-2xl font-bold;
+  }
+
+  &__alert {
+    color: a.$color-accent2;
+
+    @apply text-2xl;
+  }
+
+  &__items {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-height: 60rem;
+    overflow: auto;
+
+    @apply gap-2 contain-layout contain-paint;
+  }
+}

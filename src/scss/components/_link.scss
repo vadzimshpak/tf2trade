@@ -1,0 +1,13 @@
+@use "../abstracts/index" as a;
+
+a:link, a:visited {
+  color: a.$color-inactive-text;
+}
+
+a:active {
+  color: a.$color-accent2;
+}
+
+a:hover {
+  color: a.$color-accent2;
+}

@@ -1,0 +1,26 @@
+@use "../abstracts/index" as a;
+
+.banner {
+  background-color: rgba(a.$color-accent2, 0.3);
+  color: a.$color-text;
+  border-radius: .4rem;
+
+  animation: fadeIn 1s ease-in;
+
+  @apply p-2 m-2;
+
+  &__header {
+    margin-bottom: 1rem;
+    @apply text-3xl font-medium;
+  }
+
+  &__body {
+    margin-bottom: 1rem;
+
+    @apply text-2xl font-normal;
+  }
+
+  &__action {
+
+  }
+}

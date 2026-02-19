@@ -1,0 +1,46 @@
+@use "../abstracts/index" as a;
+
+.modal-wrapper {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.modal {
+  width: 30vw;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: rgba(a.$color-secondary, .03);
+  backdrop-filter: blur(95px);
+  border: .1rem solid hsla(0, 0%, 100%, .15);
+
+  border-radius: 1rem;
+
+  animation: slideUp .3s ease-in;
+
+  z-index: 2;
+
+  @apply p-4;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    color: a.$color-accent2;
+
+    @apply text-3xl;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+  }
+}

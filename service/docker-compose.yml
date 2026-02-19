@@ -1,0 +1,12 @@
+services:
+  redis:
+    image: redis:7.4-alpine # Using a lightweight Alpine-based image
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+    driver: local

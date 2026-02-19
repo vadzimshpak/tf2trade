@@ -1,0 +1,18 @@
+@use "../abstracts/index" as a;
+
+input {
+  width: 100%;
+
+  background-color: a.$color-primary;
+  color: a.$color-secondary-text;
+  border-radius: .4rem;
+  padding: 1rem !important;
+
+  border: 0;
+
+  @apply text-lg;
+}
+
+input:focus {
+  outline: .2rem solid a.$color-accent;
+}

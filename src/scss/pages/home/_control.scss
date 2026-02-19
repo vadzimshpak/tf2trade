@@ -1,0 +1,8 @@
+.control {
+  display: flex;
+  flex-direction: column;
+
+  animation: slideUp .3s ease-in;
+
+  @apply mt-4 gap-8;
+}

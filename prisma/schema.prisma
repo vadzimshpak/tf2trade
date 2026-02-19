@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../lib/generated/prisma"
+  engineType   = "client"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Bot {
+  id      Int     @id @default(autoincrement())
+  login   String  @unique
+  steamid String  @unique
+  trades  Trade[]
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  steamid   String  @unique
+  tradelink String? @unique
+  trades    Trade[]
+}
+
+model Item {
+  id               Int    @id @default(autoincrement())
+  market_hash_name String @unique
+  price_usd        Float?
+
+  @@index([market_hash_name], type: Hash)
+}
+
+model Trade {
+  id            Int     @id @default(autoincrement())
+  bot           Bot     @relation(fields: [botId], references: [id])
+  user          User    @relation(fields: [userId], references: [id])
+  botId         Int
+  userId        Int
+  tradeoffer_id String? @unique
+  user_items    Json? // [{market_hash_name: "name", assetid: "id", price_usd: 1.33}] - item Stripped
+  bot_items     Json? // [{market_hash_name: "name", assetid: "id", price_usd: 1.33}] - item Stripped
+
+  status  Int
+  error   String?
+  message String?
+}
