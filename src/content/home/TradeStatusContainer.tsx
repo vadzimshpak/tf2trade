@@ -17,6 +17,16 @@ export async function TradeStatusContainer(props: TradeProps) {
       <div className="trade-status-container__body">
         <div className="banner">
           <div className="banner__header">
+            CAUTION!
+          </div>
+          <div className="banner__body">
+            We have no balance system on site, so you will not get any change on your balance!
+            <br/>
+            By accepting trade you accept this rule! Be careful!
+          </div>
+        </div>
+        <div className="banner">
+          <div className="banner__header">
             Status: { props.trade.status }
           </div>
           <div className="banner__body">
