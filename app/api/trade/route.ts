@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
       user_items: JSON.parse(JSON.stringify(userValidatedItems)),
       bot_items: JSON.parse(JSON.stringify(botValidatedItems)),
       status: ETradeState.Created,
-      tradeoffer_id: "0",
+      tradeoffer_id: Date.now().toString() + ":" + user.steamid,
       error: null,
       message: "Offer created"
     }
