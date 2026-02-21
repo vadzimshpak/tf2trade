@@ -2,10 +2,14 @@
 
 import {redirect} from "next/navigation";
 
-export function HeaderLogo() {
+interface Props {
+  logo: string;
+}
+
+export function HeaderLogo(props: Props) {
   return (
     <div className="header__logo" onClick={() => redirect("/")}>
-      LOGO
+      { props.logo }
     </div>
   )
 }

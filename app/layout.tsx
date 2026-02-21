@@ -6,7 +6,7 @@ import "@/src/scss/_main.scss";
 
 export const metadata: Metadata = {
   title: "TF2 Trading platform",
-  description: "Trading platform for TF2 items",
+  description: "Trading platform for TF2 items, hats, unusuals and more!",
 };
 
 export default function RootLayout({
