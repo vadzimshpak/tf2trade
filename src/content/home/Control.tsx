@@ -51,7 +51,7 @@ export function Control() {
     const user_items = getSelectedItems(userInventory);
     const bot_items = getSelectedItems(botInventory);
 
-    if (!bot_items && !confirm("You not selected bot items! Be careful! We have no balance system!")) {
+    if (bot_items.length == 0 && !confirm("You not selected bot items! Be careful! We have no balance system!")) {
       return
     }
 

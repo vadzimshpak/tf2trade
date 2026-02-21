@@ -121,6 +121,7 @@ async function pullInventoryPrices(inventoryA: Inventory, discount: number): Pro
 
   await prisma.item.createMany({data: undefinedItems, skipDuplicates: true})
   inventoryA.descriptions = inventoryA.descriptions.filter((item) => (item.price_usd || 0) > 0);
+  inventoryA.descriptions = inventoryA.descriptions.filter((item) => item.tradable);
   inventoryA.descriptions = inventoryA.descriptions.sort((a, b) => b.price_usd - a.price_usd);
 
   return inventoryA;

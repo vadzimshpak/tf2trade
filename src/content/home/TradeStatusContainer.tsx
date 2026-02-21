@@ -26,7 +26,7 @@ export async function TradeStatusContainer(props: TradeProps) {
             <br/>
             Error: {props.trade.error || "None"}
           </div>
-          <Button text="Click" link={`https://steamcommunity.com/tradeoffer/${props.trade.tradeoffer_id}`} />
+          <Button text="Click" newWindow={true} link={`https://steamcommunity.com/tradeoffer/${props.trade.tradeoffer_id}`} />
         </div>
       </div>
       <div className="trade-status-container__footer">

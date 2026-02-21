@@ -5,13 +5,16 @@ interface Props {
   text: string;
   onClick?: () => void;
   link?: string;
+  newWindow?: boolean;
 }
 
 export function Button(props: Props) {
 
   function processClick() {
-    if (props.link) {
-      window.location.href =props.link;
+    if (props.link && props.newWindow) {
+      window.open(props.link);
+    } else if (props.link) {
+      window.location.href = props.link;
     }
 
     if (props.onClick) {
