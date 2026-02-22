@@ -3,6 +3,7 @@ import {SteamUser} from "@/lib/interfaces/steamUser";
 import {AppID, ContextID} from "@/lib/enums/apps";
 import prisma from "@/lib/prisma";
 import {createClient} from "redis";
+import {GetUnusualID} from "@/lib/unusuals";
 
 export interface GetInventoryParams {
   l: string;
@@ -86,6 +87,7 @@ function mergeAssets(inventory: Inventory) {
 
       if (effect && desk.market_hash_name.includes('Unusual')) {
         desk.market_hash_name = desk.market_hash_name.replace('Unusual ', `Unusual ${effect} `);
+        desk.effect_id = GetUnusualID(effect);
       }
     }
   })

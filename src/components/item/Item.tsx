@@ -36,6 +36,11 @@ export default function Item(props: ItemProps) {
             ? <span className="item__body-amount">{props.description.selected_assetids.length}х</span>
             : <span className="item__body-amount">{props.description.assetids.length}х</span>
           }
+          {
+            props.description.effect_id
+              ? <img className="item__body-img" src={`https://marketplace.tf/images/particles/${props.description.effect_id}_380x380.png`} alt=""/>
+              : null
+          }
           <img className="item__body-img" src={`https://community.fastly.steamstatic.com/economy/image/${props.description.icon_url}/225x225?allow_animated=1`} alt=""/>
           <span className="item__body-name">{props.description.market_hash_name}</span>
         </div>

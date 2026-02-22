@@ -54,6 +54,7 @@ export interface Description {
   price_keys: number;
   price_metal: number;
   limit: number;
+  effect_id?: number;
 }
 
 export interface Inventory {
