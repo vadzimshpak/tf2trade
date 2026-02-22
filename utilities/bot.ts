@@ -142,7 +142,7 @@ export async function createTradeoffer(user: User, user_items: ShortDescription[
 }
 
 async function refreshInventory() {
-  const inventory = await getFullInventory({id: 1, steamid: STEAMID}, generateInvParams());
+  const inventory = await getFullInventory({id: 1, steamid: STEAMID}, generateInvParams(), -5);
   if (!inventory) {
     console.error("Failed to refresh bot inventory");
     console.log(inventory)

@@ -24,13 +24,12 @@ export async function UserInventory() {
 
     const cacheInventory = await client.get(`inventory/${user.steamid}`);
 
-
     if (cacheInventory) {
       inventory = JSON.parse(cacheInventory) as Inventory;
       inventory = await applyInventoryLimit(inventory);
       console.log('Using cache inventory for ', user.steamid)
     } else {
-      inventory = await getFullInventory(user, generateInvParams(), 5);
+      inventory = await getFullInventory(user, generateInvParams(), 0);
       if (inventory)
         inventory = await applyInventoryLimit(inventory);
 

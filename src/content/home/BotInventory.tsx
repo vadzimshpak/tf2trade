@@ -24,7 +24,7 @@ export async function BotInventory() {
     inventory = JSON.parse(cacheInventory) as Inventory;
     console.log('Using cache inventory for ', bot.steamid)
   } else {
-    inventory = await getFullInventory(bot, generateInvParams());
+    inventory = await getFullInventory(bot, generateInvParams(), -5);
     await client.set(`inventory/${bot.steamid}`, JSON.stringify(inventory));
   }
 

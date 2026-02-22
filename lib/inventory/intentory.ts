@@ -123,6 +123,10 @@ export async function getFullInventory(
   return inventoryA;
 }
 
+function lerp(start: number, end: number, t: number) {
+  return start + (end - start) * t;
+}
+
 async function pullInventoryPrices(inventoryA: Inventory, discount: number): Promise<Inventory> {
   if (!inventoryA.descriptions) {
     return inventoryA;
@@ -149,8 +153,9 @@ async function pullInventoryPrices(inventoryA: Inventory, discount: number): Pro
       continue;
     }
 
+    desk.price_usd = lerp(item.price_buy, item.price_sell, Math.min(item.level / 100, 1));
+    desk.price_usd *= (100 - discount) / 100;
 
-    desk.price_usd = (item.price_buy || 0) * (100 - discount) / 100;
     desk.limit = item.limit;
     if (desk.price_usd >= KEY_VALUE) {
       desk.price_keys = Math.floor(desk.price_usd / KEY_VALUE);
