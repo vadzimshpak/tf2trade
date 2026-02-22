@@ -10,7 +10,7 @@ import {
   UserSelectedInventory,
   UserTotalAmount
 } from "@/src/content/home/inventory/Inventory";
-import {generateInvParams, getFullInventory} from "@/lib/inventory/intentory";
+import {applyInventoryLimit, generateInvParams, getFullInventory} from "@/lib/inventory/intentory";
 import {createClient} from "redis";
 
 
@@ -26,9 +26,13 @@ export async function UserInventory() {
 
     if (cacheInventory) {
       inventory = JSON.parse(cacheInventory) as Inventory;
+      inventory = await applyInventoryLimit(inventory);
       console.log('Using cache inventory for ', user.steamid)
     } else {
       inventory = await getFullInventory(user, generateInvParams(), 5);
+      if (inventory)
+        inventory = await applyInventoryLimit(inventory);
+
       await client.set(`inventory/${user.steamid}`, JSON.stringify(inventory), {EX: 1000 * 60 * 60}); // Expires in hour
     }
   }

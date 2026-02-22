@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Item" ADD COLUMN     "level" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "level_for_qb" INTEGER NOT NULL DEFAULT 0;

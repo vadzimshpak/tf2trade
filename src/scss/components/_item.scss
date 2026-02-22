@@ -12,9 +12,10 @@
   &__price {
     color: a.$color-accent;
     position: absolute;
-    top: 1.5rem;
+    top: .3rem;
     left: .5rem;
 
+    text-align: left;
     transform: rotate(-17deg);
 
     @apply text-xl;

@@ -28,60 +28,106 @@ export type AggregateItem = {
 
 export type ItemAvgAggregateOutputType = {
   id: number | null
-  price_usd: number | null
+  limit: number | null
+  level: number | null
+  level_for_qb: number | null
+  price_buy: number | null
+  price_sell: number | null
 }
 
 export type ItemSumAggregateOutputType = {
   id: number | null
-  price_usd: number | null
+  limit: number | null
+  level: number | null
+  level_for_qb: number | null
+  price_buy: number | null
+  price_sell: number | null
 }
 
 export type ItemMinAggregateOutputType = {
   id: number | null
   market_hash_name: string | null
-  price_usd: number | null
+  limit: number | null
+  level: number | null
+  level_for_qb: number | null
+  price_buy: number | null
+  price_sell: number | null
+  updated_at: Date | null
 }
 
 export type ItemMaxAggregateOutputType = {
   id: number | null
   market_hash_name: string | null
-  price_usd: number | null
+  limit: number | null
+  level: number | null
+  level_for_qb: number | null
+  price_buy: number | null
+  price_sell: number | null
+  updated_at: Date | null
 }
 
 export type ItemCountAggregateOutputType = {
   id: number
   market_hash_name: number
-  price_usd: number
+  limit: number
+  level: number
+  level_for_qb: number
+  price_buy: number
+  price_sell: number
+  updated_at: number
   _all: number
 }
 
 
 export type ItemAvgAggregateInputType = {
   id?: true
-  price_usd?: true
+  limit?: true
+  level?: true
+  level_for_qb?: true
+  price_buy?: true
+  price_sell?: true
 }
 
 export type ItemSumAggregateInputType = {
   id?: true
-  price_usd?: true
+  limit?: true
+  level?: true
+  level_for_qb?: true
+  price_buy?: true
+  price_sell?: true
 }
 
 export type ItemMinAggregateInputType = {
   id?: true
   market_hash_name?: true
-  price_usd?: true
+  limit?: true
+  level?: true
+  level_for_qb?: true
+  price_buy?: true
+  price_sell?: true
+  updated_at?: true
 }
 
 export type ItemMaxAggregateInputType = {
   id?: true
   market_hash_name?: true
-  price_usd?: true
+  limit?: true
+  level?: true
+  level_for_qb?: true
+  price_buy?: true
+  price_sell?: true
+  updated_at?: true
 }
 
 export type ItemCountAggregateInputType = {
   id?: true
   market_hash_name?: true
-  price_usd?: true
+  limit?: true
+  level?: true
+  level_for_qb?: true
+  price_buy?: true
+  price_sell?: true
+  updated_at?: true
   _all?: true
 }
 
@@ -174,7 +220,12 @@ export type ItemGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 export type ItemGroupByOutputType = {
   id: number
   market_hash_name: string
-  price_usd: number | null
+  limit: number
+  level: number
+  level_for_qb: number
+  price_buy: number
+  price_sell: number
+  updated_at: Date | null
   _count: ItemCountAggregateOutputType | null
   _avg: ItemAvgAggregateOutputType | null
   _sum: ItemSumAggregateOutputType | null
@@ -203,13 +254,23 @@ export type ItemWhereInput = {
   NOT?: Prisma.ItemWhereInput | Prisma.ItemWhereInput[]
   id?: Prisma.IntFilter<"Item"> | number
   market_hash_name?: Prisma.StringFilter<"Item"> | string
-  price_usd?: Prisma.FloatNullableFilter<"Item"> | number | null
+  limit?: Prisma.IntFilter<"Item"> | number
+  level?: Prisma.IntFilter<"Item"> | number
+  level_for_qb?: Prisma.IntFilter<"Item"> | number
+  price_buy?: Prisma.FloatFilter<"Item"> | number
+  price_sell?: Prisma.FloatFilter<"Item"> | number
+  updated_at?: Prisma.DateTimeNullableFilter<"Item"> | Date | string | null
 }
 
 export type ItemOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   market_hash_name?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrderInput | Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type ItemWhereUniqueInput = Prisma.AtLeast<{
@@ -218,13 +279,23 @@ export type ItemWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.ItemWhereInput | Prisma.ItemWhereInput[]
   OR?: Prisma.ItemWhereInput[]
   NOT?: Prisma.ItemWhereInput | Prisma.ItemWhereInput[]
-  price_usd?: Prisma.FloatNullableFilter<"Item"> | number | null
+  limit?: Prisma.IntFilter<"Item"> | number
+  level?: Prisma.IntFilter<"Item"> | number
+  level_for_qb?: Prisma.IntFilter<"Item"> | number
+  price_buy?: Prisma.FloatFilter<"Item"> | number
+  price_sell?: Prisma.FloatFilter<"Item"> | number
+  updated_at?: Prisma.DateTimeNullableFilter<"Item"> | Date | string | null
 }, "id" | "market_hash_name">
 
 export type ItemOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   market_hash_name?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrderInput | Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ItemCountOrderByAggregateInput
   _avg?: Prisma.ItemAvgOrderByAggregateInput
   _max?: Prisma.ItemMaxOrderByAggregateInput
@@ -238,82 +309,149 @@ export type ItemScalarWhereWithAggregatesInput = {
   NOT?: Prisma.ItemScalarWhereWithAggregatesInput | Prisma.ItemScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Item"> | number
   market_hash_name?: Prisma.StringWithAggregatesFilter<"Item"> | string
-  price_usd?: Prisma.FloatNullableWithAggregatesFilter<"Item"> | number | null
+  limit?: Prisma.IntWithAggregatesFilter<"Item"> | number
+  level?: Prisma.IntWithAggregatesFilter<"Item"> | number
+  level_for_qb?: Prisma.IntWithAggregatesFilter<"Item"> | number
+  price_buy?: Prisma.FloatWithAggregatesFilter<"Item"> | number
+  price_sell?: Prisma.FloatWithAggregatesFilter<"Item"> | number
+  updated_at?: Prisma.DateTimeNullableWithAggregatesFilter<"Item"> | Date | string | null
 }
 
 export type ItemCreateInput = {
   market_hash_name: string
-  price_usd?: number | null
+  limit: number
+  level?: number
+  level_for_qb?: number
+  price_buy: number
+  price_sell: number
+  updated_at?: Date | string | null
 }
 
 export type ItemUncheckedCreateInput = {
   id?: number
   market_hash_name: string
-  price_usd?: number | null
+  limit: number
+  level?: number
+  level_for_qb?: number
+  price_buy: number
+  price_sell: number
+  updated_at?: Date | string | null
 }
 
 export type ItemUpdateInput = {
   market_hash_name?: Prisma.StringFieldUpdateOperationsInput | string
-  price_usd?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  limit?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  level_for_qb?: Prisma.IntFieldUpdateOperationsInput | number
+  price_buy?: Prisma.FloatFieldUpdateOperationsInput | number
+  price_sell?: Prisma.FloatFieldUpdateOperationsInput | number
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ItemUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   market_hash_name?: Prisma.StringFieldUpdateOperationsInput | string
-  price_usd?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  limit?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  level_for_qb?: Prisma.IntFieldUpdateOperationsInput | number
+  price_buy?: Prisma.FloatFieldUpdateOperationsInput | number
+  price_sell?: Prisma.FloatFieldUpdateOperationsInput | number
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ItemCreateManyInput = {
   id?: number
   market_hash_name: string
-  price_usd?: number | null
+  limit: number
+  level?: number
+  level_for_qb?: number
+  price_buy: number
+  price_sell: number
+  updated_at?: Date | string | null
 }
 
 export type ItemUpdateManyMutationInput = {
   market_hash_name?: Prisma.StringFieldUpdateOperationsInput | string
-  price_usd?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  limit?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  level_for_qb?: Prisma.IntFieldUpdateOperationsInput | number
+  price_buy?: Prisma.FloatFieldUpdateOperationsInput | number
+  price_sell?: Prisma.FloatFieldUpdateOperationsInput | number
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ItemUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   market_hash_name?: Prisma.StringFieldUpdateOperationsInput | string
-  price_usd?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  limit?: Prisma.IntFieldUpdateOperationsInput | number
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  level_for_qb?: Prisma.IntFieldUpdateOperationsInput | number
+  price_buy?: Prisma.FloatFieldUpdateOperationsInput | number
+  price_sell?: Prisma.FloatFieldUpdateOperationsInput | number
+  updated_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ItemCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   market_hash_name?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type ItemAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
 }
 
 export type ItemMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   market_hash_name?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type ItemMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   market_hash_name?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
 }
 
 export type ItemSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  price_usd?: Prisma.SortOrder
+  limit?: Prisma.SortOrder
+  level?: Prisma.SortOrder
+  level_for_qb?: Prisma.SortOrder
+  price_buy?: Prisma.SortOrder
+  price_sell?: Prisma.SortOrder
 }
 
-export type NullableFloatFieldUpdateOperationsInput = {
-  set?: number | null
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
   increment?: number
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 
@@ -321,28 +459,48 @@ export type NullableFloatFieldUpdateOperationsInput = {
 export type ItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   market_hash_name?: boolean
-  price_usd?: boolean
+  limit?: boolean
+  level?: boolean
+  level_for_qb?: boolean
+  price_buy?: boolean
+  price_sell?: boolean
+  updated_at?: boolean
 }, ExtArgs["result"]["item"]>
 
 export type ItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   market_hash_name?: boolean
-  price_usd?: boolean
+  limit?: boolean
+  level?: boolean
+  level_for_qb?: boolean
+  price_buy?: boolean
+  price_sell?: boolean
+  updated_at?: boolean
 }, ExtArgs["result"]["item"]>
 
 export type ItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   market_hash_name?: boolean
-  price_usd?: boolean
+  limit?: boolean
+  level?: boolean
+  level_for_qb?: boolean
+  price_buy?: boolean
+  price_sell?: boolean
+  updated_at?: boolean
 }, ExtArgs["result"]["item"]>
 
 export type ItemSelectScalar = {
   id?: boolean
   market_hash_name?: boolean
-  price_usd?: boolean
+  limit?: boolean
+  level?: boolean
+  level_for_qb?: boolean
+  price_buy?: boolean
+  price_sell?: boolean
+  updated_at?: boolean
 }
 
-export type ItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "market_hash_name" | "price_usd", ExtArgs["result"]["item"]>
+export type ItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "market_hash_name" | "limit" | "level" | "level_for_qb" | "price_buy" | "price_sell" | "updated_at", ExtArgs["result"]["item"]>
 
 export type $ItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Item"
@@ -350,7 +508,12 @@ export type $ItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     market_hash_name: string
-    price_usd: number | null
+    limit: number
+    level: number
+    level_for_qb: number
+    price_buy: number
+    price_sell: number
+    updated_at: Date | null
   }, ExtArgs["result"]["item"]>
   composites: {}
 }
@@ -776,7 +939,12 @@ export interface Prisma__ItemClient<T, Null = never, ExtArgs extends runtime.Typ
 export interface ItemFieldRefs {
   readonly id: Prisma.FieldRef<"Item", 'Int'>
   readonly market_hash_name: Prisma.FieldRef<"Item", 'String'>
-  readonly price_usd: Prisma.FieldRef<"Item", 'Float'>
+  readonly limit: Prisma.FieldRef<"Item", 'Int'>
+  readonly level: Prisma.FieldRef<"Item", 'Int'>
+  readonly level_for_qb: Prisma.FieldRef<"Item", 'Int'>
+  readonly price_buy: Prisma.FieldRef<"Item", 'Float'>
+  readonly price_sell: Prisma.FieldRef<"Item", 'Float'>
+  readonly updated_at: Prisma.FieldRef<"Item", 'DateTime'>
 }
     
 

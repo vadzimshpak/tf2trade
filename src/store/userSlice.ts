@@ -8,6 +8,7 @@ interface UserState {
   loading: boolean;
   selectedItems: number;
   totalAmount: number;
+  selectedNames: string[];
 }
 
 const initialState: UserState = {
@@ -15,7 +16,8 @@ const initialState: UserState = {
   inventory: null,
   loading: false,
   selectedItems: 0,
-  totalAmount: 0
+  totalAmount: 0,
+  selectedNames: [],
 }
 
 const userSlice = createSlice({

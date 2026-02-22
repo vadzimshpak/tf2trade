@@ -15,7 +15,7 @@ export function Control() {
   const botTotal = useAppSelector(state => state.bot.totalAmount);
 
   function calcTradeDisabled() {
-    if (userTotal === 0 && botTotal === 0) {
+    if (userTotal === 0 || botTotal === 0) {
       return true;
     }
 
@@ -50,10 +50,6 @@ export function Control() {
 
     const user_items = getSelectedItems(userInventory);
     const bot_items = getSelectedItems(botInventory);
-
-    if (bot_items.length == 0 && !confirm("You not selected bot items! Be careful! We have no balance system!")) {
-      return
-    }
 
     const response = await fetch('/api/trade', {
       method: "POST",

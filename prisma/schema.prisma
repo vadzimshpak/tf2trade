@@ -30,9 +30,14 @@ model User {
 }
 
 model Item {
-  id               Int    @id @default(autoincrement())
-  market_hash_name String @unique
-  price_usd        Float?
+  id               Int       @id @default(autoincrement())
+  market_hash_name String    @unique
+  limit            Int
+  level            Int       @default(0)
+  level_for_qb     Int       @default(0)
+  price_buy        Float
+  price_sell       Float
+  updated_at       DateTime? @updatedAt
 
   @@index([market_hash_name], type: Hash)
 }

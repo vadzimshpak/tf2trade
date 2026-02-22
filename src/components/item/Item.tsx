@@ -9,6 +9,7 @@ interface ItemProps {
   onClick: () => void;
 }
 
+
 export default function Item(props: ItemProps) {
   function getQualityColor() {
     for (let tag of props.description.tags) {
@@ -23,7 +24,11 @@ export default function Item(props: ItemProps) {
 
   return (
     <div className="item">
-      <span className="item__price">{props.description.price_usd.toFixed(2)} ref</span>
+      <span className="item__price">
+        {props.description.price_keys} keys
+        <br/>
+        {props.description.price_metal?.toFixed(2)} refs
+      </span>
 
       <div className="item__body" onClick={props.onClick}>
         <div className="item__body-quality" style={{background: getQualityColor()}}>

@@ -1,96 +1,63 @@
 import prisma from "@/lib/prisma";
-import * as cheerio from "cheerio";
+import {readFileSync} from "fs";
+import {Item} from "@/lib/generated/prisma/client";
 
-const REF_VALUE = 0.03; // value in refs
-const KEY_VALUE = 56.22;
+const KEY_VALUE = parseFloat(process.env.KEY_VALUE!);
+const API_KEY = process.env.STN_APIKEY;
 
-interface Price {
+async function updateSchema() {
+  const file = readFileSync('utilities/output.json', 'utf8');
+  const schema = JSON.parse(file);
 
+  const items = [];
+  for (const item of schema.result.schema) {
+    items.push({
+      market_hash_name: item,
+      limit: 0,
+      price_buy: 0,
+      price_sell: 0
+    });
+  }
+
+  await prisma.item.createMany({
+    data: items,
+    skipDuplicates: true
+  })
 }
 
-const cookie = "__Secure-connect.sid=s%3AasahNliVf3ckInqPEw8i_p1yLQUiJGPE.a6YzPZjs1Gn6%2BGoNVW7ku8LXz7xfVo7UM7Le9veZ80s; return=%2Fdiscord"
+async function updatePrice(item: Item) {
+  const response = await fetch(`https://api.stntrading.eu/GetItemDetails/v1?full_name=${item.market_hash_name}&apikey=${API_KEY}`);
+  const json = await response.json();
 
-async function fetchPrices(market_hash_name: string) {
-  const response = await fetch(`https://gladiator.tf/sales?item=${market_hash_name}`, {
-    headers: {
-      'Cookie': cookie
-    }
-  });
-  const body = await response.text();
-  const $ = cheerio.load(body);
-
-  const sold = $('.card-body .col-sm-6:first-child');
-  const bought = $('.card-body .col-sm-6:not(:first-child)');
-
-  let sells = null;
-  let boughts = null;
-
-  const boughtHeader = $(bought).find('h5');
-
-  console.log($(bought).find('h5').length)
-
-  for (let i = 0; i < boughtHeader.length; i++) {
-    if (boughtHeader.eq(i).text() === 'Past 30 days') {
-      boughts = $(bought).find('ul').last().find('li');
-    }
+  if (json.success != 1) {
+    console.error("CANT FIND PRICE FOR: ", item.market_hash_name);
+    return;
   }
 
-  let totalAmount = 0;
-  let totalValue = 0;
-
-  if (boughts) {
-    for (let i = 0; i < boughts.length; i++) {
-      const row = boughts
-                          .eq(i)
-                          .text()
-                          .replaceAll(' ', '')
-                          .replace('ref', '');
-
-      const rowSplit = row.split('@');
-      const valueSplit = rowSplit[1].split('keys');
-
-      totalAmount += parseInt(rowSplit[0]);
-      if (valueSplit.length == 1) {
-        totalValue += parseFloat(valueSplit[0]) * parseInt(rowSplit[0]);
-      } else {
-        totalValue += parseFloat(valueSplit[0] || '0') * parseInt(rowSplit[0]) * KEY_VALUE + parseFloat(valueSplit[1] || '0');
-      }
-    }
-  }
-
-  if (totalAmount == 0 || totalValue == 0) {
-    return 0
-  }
-
-  return parseFloat((totalValue/totalAmount).toFixed(2));
-}
-
-async function updatePrice(market_hash_name: string) {
-  const result = await fetchPrices(market_hash_name);
-  console.log(result, 'refs')
-
+  console.log('updating: ', item.market_hash_name);
   await prisma.item.update({
-    where: {
-      market_hash_name
-    },
+    where: {id: item.id},
     data: {
-      price_usd: result
+      limit: json.item.stock.limit,
+      level: json.item.stock.level,
+      level_for_qb: json.item.stock.level_for_quick_buy,
+      price_sell: json.item.pricing.sell.keys * KEY_VALUE + json.item.pricing.sell.metal,
+      price_buy: json.item.pricing.buy.keys * KEY_VALUE + json.item.pricing.buy.metal,
     }
   })
 }
 
 (async () => {
-  for (let i = 0; true; i += 100) {
-    const items = await prisma.item.findMany({
-      take: 100,
-      skip: i,
-    })
+  // await updateSchema();
+  const items = await prisma.item.findMany({where: {updated_at: null}});
 
-    if (!items) break;
-
-    for (let item of items) {
-      if (item.market_hash_name.includes('(')) continue;
-      await updatePrice(item.market_hash_name);
+  let promises = [];
+  for (const item of items) {
+    promises.push(updatePrice(item));
+    if (promises.length > 10)
+    {
+      await Promise.all(promises);
+      promises = [];
     }
   }
 })();

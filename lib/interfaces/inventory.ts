@@ -42,8 +42,18 @@ export interface Description {
       color: string;
     },
   ];
+  descriptions: [
+    {
+      value: string;
+      color: string;
+      name: string;
+    }
+  ];
   sealed: number;
   price_usd: number;
+  price_keys: number;
+  price_metal: number;
+  limit: number;
 }
 
 export interface Inventory {
