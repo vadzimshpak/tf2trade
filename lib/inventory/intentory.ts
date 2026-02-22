@@ -150,7 +150,7 @@ async function pullInventoryPrices(inventoryA: Inventory, discount: number): Pro
 
     desk.price_usd = (item.price_buy || 0) * (100 - discount) / 100;
     desk.limit = item.limit;
-    if (desk.price_usd > KEY_VALUE) {
+    if (desk.price_usd >= KEY_VALUE) {
       desk.price_keys = Math.floor(desk.price_usd / KEY_VALUE);
       desk.price_metal = ((desk.price_usd / KEY_VALUE) % 1) * KEY_VALUE;
     } else {
