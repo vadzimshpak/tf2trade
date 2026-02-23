@@ -26,7 +26,7 @@ export function HeaderNav(props: Props) {
         user
           ?
             <div className="header__nav-buttons">
-              <Button text="Open profile" onClick={() => dispatch(setProfileModalState(true)) } />
+              <Button text="Profile" onClick={() => dispatch(setProfileModalState(true)) } />
               <Button text="Logout" link="login/getout" />
             </div>
           : <Button text="Sign in through Steam" link="login/auth" />
