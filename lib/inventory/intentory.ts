@@ -182,6 +182,10 @@ export async function applyInventoryLimit(inventory: Inventory) {
   const userItemsCount: any = {};
   const userAvailableItems: any = {};
 
+  if (!inventory.descriptions || !botInventory.descriptions) {
+    return inventory;
+  }
+
   // Get all user items with same name
   for (const desk of inventory.descriptions) {
     if (!userItemsCount[desk.market_hash_name])
