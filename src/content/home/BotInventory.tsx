@@ -12,7 +12,7 @@ import {SteamUser} from "@/lib/interfaces/steamUser";
 import { createClient } from 'redis';
 
 export async function BotInventory() {
-  const bot: SteamUser = {id: 1, steamid: "76561198892652425"};
+  const bot: SteamUser = {id: 1, steamid: process.env.BOT_STEAMID! };
 
   const client = createClient();
   await client.connect();
