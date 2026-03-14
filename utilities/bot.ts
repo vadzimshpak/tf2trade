@@ -179,57 +179,63 @@ async function removeItems(trade: Trade) {
   await client.set(`inventory/${STEAMID}`, JSON.stringify(inventory));
 }
 
+async function main(cycles: number): Promise<number> {
+  const trade = await prisma.trade.findFirst({where: {status: 0}});
+  if (!trade) {
+    if (cycles > 100 && await refreshInventory()) {
+      return 0;
+    }
+    await new Promise<void>(resolve => setTimeout(resolve, 3000));
+    return cycles + 1;
+  }
+
+  console.info(`Working with offer: ${trade.id}`);
+  const user = await prisma.user.findFirst({where: {id: trade.userId}});
+  const user_items = JSON.stringify(trade.user_items);
+  const bot_items = JSON.stringify(trade.bot_items);
+  try {
+    const offer = await createTradeoffer(user!, JSON.parse(user_items), JSON.parse(bot_items));
+    if (!offer) throw new Error(`Empty tradeoffer #${trade.id}`);
+
+    await prisma.trade.update({
+      where: { id: trade.id },
+      data: {
+        tradeoffer_id: offer.id,
+        status: ETradeOfferState.Active,
+        message: "Offer sent"
+      }
+    });
+
+    await removeItems(trade);
+  } catch (e) {
+    let message = 'Unexpected error';
+    if (e instanceof Error) {
+      message = `Error while creating offer #${trade.id} - ${e.message}`;
+    }
+
+    await prisma.trade.update({
+      where: { id: trade.id },
+      data: {
+        status: ETradeOfferState.Invalid,
+        error: message,
+        message: "Offer rejected"
+      }
+    });
+  }
+  return cycles + 1;
+}
+
 (async () => {
-  console.log("Bot warmup...")
-  let cycles = 0;
+  console.log("Bot warmup...");
   await new Promise<void>(resolve => setTimeout(resolve, 10_000));
 
+  let cycles = 0;
   while (true) {
-    const trade = await prisma.trade.findFirst({where: {status: 0}})
-    if (!trade) {
-      if (cycles > 100 && await refreshInventory()) {
-        cycles = 0;
-      }
-      await new Promise<void>(resolve => setTimeout(resolve, 3000));
-      cycles++;
-      continue;
-    }
-
-    cycles++;
-
-    console.info(`Working with offer: ${trade.id}`);
-    const user = await prisma.user.findFirst({where: {id: trade.userId}});
-    const user_items = JSON.stringify(trade.user_items);
-    const bot_items = JSON.stringify(trade.bot_items);
     try {
-      const offer = await createTradeoffer(user!, JSON.parse(user_items), JSON.parse(bot_items));
-      if (!offer) throw new Error(`Empty tradeoffer #${trade.id}`);
-
-      await prisma.trade.update({
-        where: { id: trade.id },
-        data: {
-          tradeoffer_id: offer.id,
-          status: ETradeOfferState.Active,
-          message: "Offer sent"
-        }
-      });
-
-      await removeItems(trade);
+      cycles = await main(cycles);
     } catch (e) {
-      let message = 'Unexpected error';
-      if (e instanceof Error) {
-        message = `Error while creating offer #${trade.id} - ${e.message}`;
-      }
-
-      await prisma.trade.update({
-        where: { id: trade.id },
-        data: {
-          status: ETradeOfferState.Invalid,
-          error: message,
-          message: "Offer rejected"
-        }
-      })
+      console.error("Bot main loop error:", e);
     }
   }
-})()
+})();
 
