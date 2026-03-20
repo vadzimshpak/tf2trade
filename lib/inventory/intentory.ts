@@ -153,7 +153,7 @@ async function pullInventoryPrices(inventoryA: Inventory, discount: number): Pro
       continue;
     }
 
-    desk.price_usd = lerp(item.price_buy, item.price_sell, Math.min(item.level / 100, 1));
+    desk.price_usd = item.price_sell;
     desk.price_usd *= (100 - discount) / 100;
 
     desk.limit = item.limit;
