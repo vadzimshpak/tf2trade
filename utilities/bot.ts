@@ -23,11 +23,18 @@ const steamUser = new SteamUser();
 const community = new SteamCommunity();
 var manager: TradeOfferManager | null = null;
 
-steamUser.logOn({
-  accountName: LOGIN,
-  password: PASSWORD,
-  twoFactorCode: SteamTOTP.generateAuthCode(SHARED_SECRET),
-})
+function performSteamLogOn() {
+  steamUser.logOn({
+    accountName: LOGIN,
+    password: PASSWORD,
+    twoFactorCode: SteamTOTP.generateAuthCode(SHARED_SECRET),
+  });
+}
+
+steamUser.once("disconnected", () => {
+  console.info("Steam disconnected, performing re-login");
+  performSteamLogOn();
+});
 
 steamUser.on('webSession', (sessionID, cookies) => {
   console.info(`Bot websession: ${sessionID}`);
@@ -64,6 +71,10 @@ steamUser.on('webSession', (sessionID, cookies) => {
         message: message
       },
     })
+
+    if (offer.state === ETradeOfferState.Accepted) {
+      await cleanInventory(offer.partner.getSteamID64());
+    }
   });
 })
 
@@ -179,6 +190,13 @@ async function removeItems(trade: Trade) {
   await client.set(`inventory/${STEAMID}`, JSON.stringify(inventory));
 }
 
+async function cleanInventory(steamid: string) {
+  const client = createClient();
+  await client.connect();
+  await client.del(`inventory/${steamid}`);
+  console.info(`Inventory cleaned for ${steamid}`);
+}
+
 async function main(cycles: number): Promise<number> {
   const trade = await prisma.trade.findFirst({where: {status: 0}});
   if (!trade) {
@@ -224,6 +242,8 @@ async function main(cycles: number): Promise<number> {
   }
   return cycles + 1;
 }
+
+performSteamLogOn();
 
 (async () => {
   console.log("Bot warmup...");
