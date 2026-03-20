@@ -29,7 +29,7 @@ export async function UserInventory() {
       inventory = await applyInventoryLimit(inventory);
       console.log('Using cache inventory for ', user.steamid)
     } else {
-      inventory = await getFullInventory(user, generateInvParams(), 0);
+      inventory = await getFullInventory(user, generateInvParams(), 0, false);
       if (inventory)
         inventory = await applyInventoryLimit(inventory);
 

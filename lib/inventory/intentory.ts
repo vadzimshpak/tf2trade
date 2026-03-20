@@ -98,7 +98,8 @@ function mergeAssets(inventory: Inventory) {
 export async function getFullInventory(
   steamuser: SteamUser,
   params: GetInventoryParams,
-  discount: number = 0
+  discount: number = 0,
+  isBot: boolean = true
 ): Promise<Inventory | null> {
   params.count = 1500; // Inventory.tsx half
 
@@ -127,7 +128,7 @@ function lerp(start: number, end: number, t: number) {
   return start + (end - start) * t;
 }
 
-async function pullInventoryPrices(inventoryA: Inventory, discount: number): Promise<Inventory> {
+async function pullInventoryPrices(inventoryA: Inventory, discount: number, isBot: boolean = true): Promise<Inventory> {
   if (!inventoryA.descriptions) {
     return inventoryA;
   }
@@ -153,7 +154,7 @@ async function pullInventoryPrices(inventoryA: Inventory, discount: number): Pro
       continue;
     }
 
-    desk.price_usd = item.price_sell;
+    desk.price_usd = isBot ? item.price_sell : item.price_buy;
     desk.price_usd *= (100 - discount) / 100;
 
     desk.limit = item.limit;
