@@ -23,6 +23,9 @@ const steamUser = new SteamUser();
 const community = new SteamCommunity();
 var manager: TradeOfferManager | null = null;
 
+/** Плановый релогин раз в полдня (12 ч) */
+const HALF_DAY_MS = 12 * 60 * 60 * 1000;
+
 function performSteamLogOn() {
   steamUser.logOn({
     accountName: LOGIN,
@@ -31,7 +34,7 @@ function performSteamLogOn() {
   });
 }
 
-steamUser.once("disconnected", () => {
+steamUser.on("disconnected", () => {
   console.info("Steam disconnected, performing re-login");
   performSteamLogOn();
 });
@@ -244,6 +247,11 @@ async function main(cycles: number): Promise<number> {
 }
 
 performSteamLogOn();
+
+setInterval(() => {
+  console.info("Scheduled Steam re-login (every 12h)");
+  steamUser.logOff();
+}, HALF_DAY_MS);
 
 (async () => {
   console.log("Bot warmup...");
