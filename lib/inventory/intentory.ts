@@ -218,3 +218,40 @@ export async function applyInventoryLimit(inventory: Inventory) {
 
   return inventory;
 }
+
+/**
+ * Оставляет предметы, в названии которых встречается хотя бы одно из ключевых слов (без учёта регистра).
+ */
+export function filterInventoryByNameKeywords(
+  inventory: Inventory,
+  keywords: string[],
+): Inventory {
+  const normalized = keywords
+    .map((k) => k.trim().toLowerCase())
+    .filter(Boolean);
+  if (normalized.length === 0) {
+    return inventory;
+  }
+
+  const descriptions = inventory.descriptions ?? [];
+  if (descriptions.length === 0) {
+    return { ...inventory, descriptions: [] };
+  }
+
+  const matchesDescription = (d: (typeof descriptions)[number]) => {
+    const haystacks = [d.market_hash_name, d.name, d.market_name]
+      .filter((s): s is string => Boolean(s))
+      .map((s) => s.toLowerCase());
+    return haystacks.some((h) =>
+      normalized.some((kw) => h.includes(kw)),
+    );
+  };
+
+  const filteredDescriptions = descriptions.filter(matchesDescription);
+
+  return {
+    ...inventory,
+    descriptions: filteredDescriptions,
+  };
+}
+

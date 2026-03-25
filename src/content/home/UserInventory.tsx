@@ -1,5 +1,3 @@
-import React from "react";
-
 import {LoginBanner, SteamBrokenBanner, TradelinkBanner} from "@/src/content/home/userbanners/UserBanners";
 
 import {Inventory} from "@/lib/interfaces/inventory";
@@ -10,7 +8,7 @@ import {
   UserSelectedInventory,
   UserTotalAmount
 } from "@/src/content/home/inventory/Inventory";
-import {applyInventoryLimit, generateInvParams, getFullInventory} from "@/lib/inventory/intentory";
+import {applyInventoryLimit, filterInventoryByNameKeywords, generateInvParams, getFullInventory} from "@/lib/inventory/intentory";
 import {createClient} from "redis";
 
 
@@ -31,7 +29,10 @@ export async function UserInventory() {
     } else {
       inventory = await getFullInventory(user, generateInvParams(), 0, false);
       if (inventory)
+      {
         inventory = await applyInventoryLimit(inventory);
+        inventory = filterInventoryByNameKeywords(inventory, ['Unusual', 'Refined Metal', 'Mann Co. Supply Crate Key']);
+      }
 
       await client.set(`inventory/${user.steamid}`, JSON.stringify(inventory), {EX: 1000 * 60 * 60}); // Expires in hour
     }
