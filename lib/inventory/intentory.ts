@@ -13,7 +13,17 @@ export interface GetInventoryParams {
   contextid: ContextID;
 }
 
+/** Ответ IEconItems_440/GetPlayerItems/v1 */
+export interface GetPlayerItemsV1Response {
+  result: {
+    status: number;
+    num_backpack_slots: number;
+    items: any[];
+  };
+}
+
 const KEY_VALUE = parseFloat(process.env.KEY_VALUE!);
+const STEAM_SIGNIN_APIKEY = process.env.STEAM_SIGNIN_APIKEY!;
 
 export function generateInvParams(appid = 440): GetInventoryParams {
   return {
@@ -23,6 +33,14 @@ export function generateInvParams(appid = 440): GetInventoryParams {
     appid: AppID.TF2,
     contextid: ContextID.Inventory
   }
+}
+
+async function getRawInventory(
+  steam_user: SteamUser,
+): Promise<GetPlayerItemsV1Response> {
+  const url = `https://api.steampowered.com/IEconItems_440/GetPlayerItems/v1/?key=${STEAM_SIGNIN_APIKEY}&steamid=${steam_user.steamid}`;
+  const response = await fetch(url);
+  return (await response.json()) as GetPlayerItemsV1Response;
 }
 
 async function getInventoryPart(
@@ -41,20 +59,6 @@ async function getInventoryPart(
   return (await response.json()) as Inventory;
 }
 
-function mergeInventories(inventoryA: Inventory, inventoryB: Inventory): Inventory {
-  // Merge assets
-  inventoryA.assets = [...inventoryA.assets, ...inventoryB.assets];
-
-  // Merge descriptions
-  inventoryA.descriptions = Array.from(
-    new Map([...inventoryA.descriptions, ...inventoryB.descriptions]
-      .map(description => [`${description.classid}-${description.instanceid}`, description])).values()
-  );
-
-
-  return inventoryA;
-}
-
 function mergeAssets(inventory: Inventory) {
   if (!inventory.descriptions)
     return inventory;
@@ -66,6 +70,7 @@ function mergeAssets(inventory: Inventory) {
         .map((asset) => asset.assetid)
     }
   );
+
 
   inventory.descriptions.map((description) => {description.selected_assetids = []})
   inventory.descriptions.map((desk) => {
@@ -101,8 +106,10 @@ export async function getFullInventory(
   discount: number = 0,
   isBot: boolean = true
 ): Promise<Inventory | null> {
-  params.count = 1500; // Inventory.tsx half
+  const rawInventory = await getRawInventory(steamuser);
 
+  params.count = rawInventory.result.items.length;
+  console.log(params.count)
   let inventoryA = await getInventoryPart(steamuser, params);
   if (!inventoryA) return null;
   if (inventoryA.error) {
@@ -110,22 +117,10 @@ export async function getFullInventory(
     return null;
   }
 
-  if (inventoryA.more_items === 1) {
-    params.start_assetid = inventoryA.last_assetid;
-    let inventoryB = await getInventoryPart(steamuser, params);
-    inventoryA = mergeInventories(inventoryA, inventoryB);
-  }
-
-
-
   inventoryA = mergeAssets(inventoryA);
   inventoryA = await pullInventoryPrices(inventoryA, discount);
 
   return inventoryA;
-}
-
-function lerp(start: number, end: number, t: number) {
-  return start + (end - start) * t;
 }
 
 async function pullInventoryPrices(inventoryA: Inventory, discount: number, isBot: boolean = true): Promise<Inventory> {
