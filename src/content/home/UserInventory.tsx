@@ -31,7 +31,7 @@ export async function UserInventory() {
       if (inventory)
       {
         inventory = await applyInventoryLimit(inventory);
-        inventory = filterInventoryByNameKeywords(inventory, ['Unusual', 'Refined Metal', 'Mann Co. Supply Crate Key']);
+        inventory = filterInventoryByNameKeywords(inventory, ['Unusual', 'Refined Metal', 'Mann Co. Supply Crate Key', 'Australium']);
       }
 
       await client.set(`inventory/${user.steamid}`, JSON.stringify(inventory), {EX: 1000 * 60 * 60}); // Expires in hour
