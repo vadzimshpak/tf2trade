@@ -75,6 +75,12 @@ export function Control() {
     <div className="control">
       <HugeButton text="TRADE" disabled={calcTradeDisabled()} onClick={trade} />
       <Button text="Refresh Inventory" onClick={() => window.location.reload()} />
+      <span className="control__notice">
+        At the moment, we only accept
+        <br></br>
+        currency and high-tier items (Unusual
+        quality).
+      </span>
     </div>
   )
 }
