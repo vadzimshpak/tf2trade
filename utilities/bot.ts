@@ -250,7 +250,7 @@ performSteamLogOn();
 
 setInterval(() => {
   console.info("Scheduled Steam re-login (every 12h)");
-  steamUser.logOff();
+  performSteamLogOn();
 }, HALF_DAY_MS);
 
 (async () => {

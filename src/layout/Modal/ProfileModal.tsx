@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 import {Button} from "@/src/components/buttons/Button";
 import Input from "@/src/components/input/Input";
@@ -49,7 +49,11 @@ export function ProfileModal() {
   const user = useAppSelector(state => state.user.user);
   const dispatch = useAppDispatch();
 
-  const [tradelink, setTradelink] = useState(user?.tradelink || "");
+  const [tradelink, setTradelink] = useState(user?.tradelink || "none");
+
+  useEffect(() => {
+    setTradelink(user?.tradelink || "none");
+  }, [user]);
 
   async function applyChanges() {
     const response = await fetch("/api/user/tradelink", {

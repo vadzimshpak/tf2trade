@@ -106,11 +106,15 @@ export async function getFullInventory(
   discount: number = 0,
   isBot: boolean = true
 ): Promise<Inventory | null> {
-  const rawInventory = await getRawInventory(steamuser);
+  params.count = 75;
+  let inventoryA: Inventory | null = await getInventoryPart(steamuser, params);
 
-  params.count = rawInventory.result.items.length;
-  console.log(params.count)
-  let inventoryA = await getInventoryPart(steamuser, params);
+  if (inventoryA.total_inventory_count > 75) {
+    params.count = inventoryA.total_inventory_count;
+    console.log(params.count)
+    inventoryA = await getInventoryPart(steamuser, params);
+  }
+
   if (!inventoryA) return null;
   if (inventoryA.error) {
     console.log(inventoryA.error);
