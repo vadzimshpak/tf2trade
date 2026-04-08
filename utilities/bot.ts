@@ -211,7 +211,6 @@ async function main(): Promise<void> {
     }
 
     await new Promise<void>(resolve => setTimeout(resolve, 3000));
-    cycles++;
     return;
   }
 
