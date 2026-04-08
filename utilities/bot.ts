@@ -22,6 +22,7 @@ const STEAMID = process.env.BOT_STEAMID!;
 const steamUser = new SteamUser();
 const community = new SteamCommunity();
 var manager: TradeOfferManager | null = null;
+var cycles = 0;
 
 /** Плановый релогин раз в полдня (12 ч) */
 const HALF_DAY_MS = 12 * 60 * 60 * 1000;
@@ -77,6 +78,7 @@ steamUser.on('webSession', (sessionID, cookies) => {
 
     if (offer.state === ETradeOfferState.Accepted) {
       await cleanInventory(offer.partner.getSteamID64());
+      cycles++;
     }
   });
 })
@@ -200,14 +202,17 @@ async function cleanInventory(steamid: string) {
   console.info(`Inventory cleaned for ${steamid}`);
 }
 
-async function main(cycles: number): Promise<number> {
+async function main(): Promise<void> {
   const trade = await prisma.trade.findFirst({where: {status: 0}});
   if (!trade) {
-    if (cycles > 100 && await refreshInventory()) {
-      return 0;
+    if (cycles > 0 && await refreshInventory()) {
+      cycles = 0;
+      return;
     }
+
     await new Promise<void>(resolve => setTimeout(resolve, 3000));
-    return cycles + 1;
+    cycles++;
+    return;
   }
 
   console.info(`Working with offer: ${trade.id}`);
@@ -243,7 +248,7 @@ async function main(cycles: number): Promise<number> {
       }
     });
   }
-  return cycles + 1;
+  return;
 }
 
 performSteamLogOn();
@@ -257,10 +262,9 @@ setInterval(() => {
   console.log("Bot warmup...");
   await new Promise<void>(resolve => setTimeout(resolve, 10_000));
 
-  let cycles = 0;
   while (true) {
     try {
-      cycles = await main(cycles);
+      await main();
     } catch (e) {
       console.error("Bot main loop error:", e);
     }

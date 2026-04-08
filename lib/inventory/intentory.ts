@@ -24,6 +24,7 @@ export interface GetPlayerItemsV1Response {
 
 const KEY_VALUE = parseFloat(process.env.KEY_VALUE!);
 const STEAM_SIGNIN_APIKEY = process.env.STEAM_SIGNIN_APIKEY!;
+const STEAM_APIS_APIKEY = process.env.STEAM_APIS_APIKEY!;
 
 export function generateInvParams(appid = 440): GetInventoryParams {
   return {
@@ -41,6 +42,12 @@ async function getRawInventory(
   const url = `https://api.steampowered.com/IEconItems_440/GetPlayerItems/v1/?key=${STEAM_SIGNIN_APIKEY}&steamid=${steam_user.steamid}`;
   const response = await fetch(url);
   return (await response.json()) as GetPlayerItemsV1Response;
+}
+
+async function getSteamApisInventory(steam_user: SteamUser, params: GetInventoryParams): Promise<Inventory> {
+  const url = `https://api.steamapis.com/steam/inventory/${steam_user.steamid}/${params.appid}/${params.contextid}?api_key=${STEAM_APIS_APIKEY}`;
+  const response = await fetch(url);
+  return (await response.json()) as Inventory;
 }
 
 async function getInventoryPart(
@@ -106,14 +113,7 @@ export async function getFullInventory(
   discount: number = 0,
   isBot: boolean = true
 ): Promise<Inventory | null> {
-  params.count = 75;
-  let inventoryA: Inventory | null = await getInventoryPart(steamuser, params);
-
-  if (inventoryA.total_inventory_count > 75) {
-    params.count = inventoryA.total_inventory_count;
-    console.log(params.count)
-    inventoryA = await getInventoryPart(steamuser, params);
-  }
+  let inventoryA: Inventory | null = await getSteamApisInventory(steamuser, params);
 
   if (!inventoryA) return null;
   if (inventoryA.error) {
